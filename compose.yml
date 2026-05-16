@@ -1,0 +1,55 @@
+services:
+  # app:
+  #   build:
+  #     context: .
+  #     target: develop
+  #   ports:
+  #     - ${HOST_PORT:-8082}:8080
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     MYSQL_HOST: db
+  #   volumes:
+  #     - .:/app
+  #   networks:
+  #     - fullstack_default
+  #   depends_on:
+  #     - db
+  #   command: ["bash", "./entrypoint.sh"]
+
+  db:
+    image: mysql:lts
+    ports:
+      - ${HOST_DB_PORT:-3306}:3306
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fullstack_default
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - ${PHPMYADMIN_PORT:-8088}:80
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - fullstack_default
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+
+networks:
+  fullstack_default:
+    name: fullstack_default
