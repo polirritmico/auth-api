@@ -1,21 +1,21 @@
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     target: develop
-  #   ports:
-  #     - ${HOST_PORT:-8082}:8080
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     MYSQL_HOST: db
-  #   volumes:
-  #     - .:/app
-  #   networks:
-  #     - fullstack_default
-  #   depends_on:
-  #     - db
-  #   command: ["bash", "./entrypoint.sh"]
+  app:
+    build:
+      context: .
+      target: production
+    ports:
+      - ${HOST_PORT:-8082}:8080
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: db
+      SPRING_ENV: prod
+    networks:
+      - fullstack_network
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["manual"]
 
   db:
     image: mysql:lts
@@ -31,7 +31,14 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - fullstack_default
+      - fullstack_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15m
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 1s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -43,13 +50,13 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     networks:
-      - fullstack_default
+      - fullstack_network
     depends_on:
-      - db
-
+      db:
+        condition: service_healthy
 volumes:
   mysql_data:
 
 networks:
-  fullstack_default:
-    name: fullstack_default
+  fullstack_network:
+    name: ${DOCKER_DOMAIN_NETWORK:-fullstack_network}
