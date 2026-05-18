@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
-    private static final String ROLE = "role";
+    private static final String ROLE = "roles";
 
     @Value("${jwt.expiration}")
     private Long expiration;
