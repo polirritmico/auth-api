@@ -127,6 +127,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<finalName>app-microservice</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
