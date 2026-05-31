@@ -42,7 +42,7 @@ CREATE TABLE `credentials` (
 --
 
 INSERT INTO `credentials` (`id`, `user_id`, `password`, `role`, `created_at`, `updated_at`, `revoked_at`) VALUES
-(1, 'test', '$2a$10$BRY/ka8.aJ2yOl/bByMhvuHQZKs0gO1a0axN/KPNIW65PmP6tD/pe', 'admin', '2026-05-16 16:48:20.000000', NULL, NULL);
+(1, 'test', '$2a$10$BRY/ka8.aJ2yOl/bByMhvuHQZKs0gO1a0axN/KPNIW65PmP6tD/pe', 'admin', '2026-05-16 16:48:20.000000', '2026-05-16 16:48:20.000000', NULL);
 
 --
 -- Indexes for dumped tables
