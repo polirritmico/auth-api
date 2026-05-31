@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 
 public class InvalidCredentialsException extends DomainException {
     public InvalidCredentialsException() {
-        super("Provided invalid credentials.", HttpStatus.UNAUTHORIZED);
+        super("Se proporcionaron credenciales inválidas", HttpStatus.UNAUTHORIZED);
     }
 
     public InvalidCredentialsException(String msg) {

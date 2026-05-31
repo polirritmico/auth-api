@@ -8,8 +8,8 @@ package cl.duoc.auth.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class ForbiddenAccessException extends DomainException {
-    public ForbiddenAccessException() {
-        super("Access denied.", HttpStatus.FORBIDDEN);
+public class NonCompliantCredentialsException extends DomainException {
+    public NonCompliantCredentialsException(String msg) {
+        super(msg, HttpStatus.BAD_REQUEST);
     }
 }
