@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
@@ -45,7 +46,8 @@ public class Credentials {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @Column
