@@ -12,6 +12,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CredentialsRepository extends JpaRepository<Credentials, Long> {
+    boolean existsByUserId(String userId);
+
     Optional<Credentials> findByUserIdAndRevokedAtIsNull(String userId);
 
     List<Credentials> findByRevokedAtIsNull();
