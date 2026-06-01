@@ -29,6 +29,7 @@ public class SecurityConfig {
     private String[] publicPaths;
 
     private final String publicAuthEndpoint = "/api/v1/auth";
+    private final String publicRegisterEndpoint = "/api/v1/auth/register";
     private final String changeOwnPasswordEndpoint = publicAuthEndpoint + "/me/password";
     private final String allowedRole = "admin";
 
@@ -42,6 +43,8 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, publicAuthEndpoint)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, publicRegisterEndpoint)
                         .permitAll()
                         .requestMatchers(publicPaths)
                         .permitAll()
