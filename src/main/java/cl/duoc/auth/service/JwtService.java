@@ -9,6 +9,7 @@ package cl.duoc.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import java.time.Instant;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class JwtService {
         return JWT.create()
                 .withSubject(user)
                 .withIssuer(issuer)
-                .withClaim(ROLE, role)
+                .withClaim(ROLE, List.of(role))
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(expiration))
                 .sign(Algorithm.HMAC256(secret));
