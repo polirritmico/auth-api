@@ -14,4 +14,5 @@ run:
 	./mvnw spring-boot:run
 
 clean:
+	docker compose down -v
 	./mvnw clean
