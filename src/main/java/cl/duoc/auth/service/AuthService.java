@@ -12,6 +12,7 @@ import cl.duoc.auth.dto.request.ChangeUserPasswordRequest;
 import cl.duoc.auth.dto.request.NewCredentialsRequest;
 import cl.duoc.auth.dto.response.AuthResponse;
 import cl.duoc.auth.dto.response.CredentialsResponse;
+import cl.duoc.auth.exception.ForbiddenAccessException;
 import cl.duoc.auth.exception.InvalidCredentialsException;
 import cl.duoc.auth.exception.NonCompliantCredentialsException;
 import cl.duoc.auth.exception.NotUniqueUserException;
@@ -36,6 +37,9 @@ public class AuthService {
     private final JwtService jwt;
     private final BCryptPasswordEncoder encoder;
     private final DtoModelMapper mapper;
+
+    private final String userRole = "user";
+    private final String adminRole = "admin";
 
     private final int minPasswordLength = 6;
     private final String hasSpecialCharPattern = ".*[^a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\\d].*";
@@ -76,6 +80,12 @@ public class AuthService {
     @Transactional
     public CredentialsResponse createCredentials(NewCredentialsRequest req) {
         logRequest("Received new credentials request: " + req.getUser());
+
+        if (!req.getRole().equalsIgnoreCase(userRole)) {
+            logRequest("Request for new non-user role: " + req.getRole());
+            validateAdminRole(req.getUser(), req.getRole());
+        }
+
         if (repo.existsByUserId(req.getUser())) {
             log.error("User already exists.");
             throw new NotUniqueUserException(req.getUser());
@@ -141,6 +151,23 @@ public class AuthService {
         repo.save(credentials);
 
         log.debug("Added validated credentials for user " + credentials.getUserId());
+    }
+
+    // ------------------------------------------------------------------------
+
+    private void validateAdminRole(String newUser, String newUserRole) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            throw new ForbiddenAccessException();
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equalsIgnoreCase(adminRole));
+        if (!isAdmin) {
+            log.error("Unauthorized attempt to create credentials with role '{}'", newUserRole);
+            throw new ForbiddenAccessException();
+        }
     }
 
     private void validateNewPasswordHasSpecialCharacters(String password) {
