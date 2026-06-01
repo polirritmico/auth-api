@@ -80,6 +80,12 @@ public class AuthService {
             log.error("User already exists.");
             throw new NotUniqueUserException(req.getUser());
         }
+
+        validateNewPasswordMinLength(req.getPassword());
+        validateNewPasswordHasLetters(req.getPassword());
+        validateNewPasswordHasNumbers(req.getPassword());
+        validateNewPasswordHasSpecialCharacters(req.getPassword());
+
         Credentials newCredentials = mapper.credentialsFromNewCredentialRequest(req, encodePassword(req.getPassword()));
         return mapper.toCredentialsResponse(repo.save(newCredentials));
     }
