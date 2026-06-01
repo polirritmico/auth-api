@@ -10,6 +10,6 @@ import org.springframework.http.HttpStatus;
 
 public class ForbiddenAccessException extends DomainException {
     public ForbiddenAccessException() {
-        super("Access denied.", HttpStatus.FORBIDDEN);
+        super("Acceso denegado.", HttpStatus.FORBIDDEN);
     }
 }
