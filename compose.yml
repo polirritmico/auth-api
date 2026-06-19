@@ -12,6 +12,7 @@ services:
       SPRING_ENV: prod
     networks:
       - fullstack_network
+      - default
     depends_on:
       db:
         condition: service_healthy
@@ -30,8 +31,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-    networks:
-      - fullstack_network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 15m
@@ -49,8 +48,6 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
-    networks:
-      - fullstack_network
     depends_on:
       db:
         condition: service_healthy
