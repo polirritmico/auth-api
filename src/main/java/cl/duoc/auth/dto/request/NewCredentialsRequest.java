@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Schema(name = "NewCredentialsRequest", description = "Payload for registering new user credentials")
 public class NewCredentialsRequest {
     @NotBlank(message = "El usuario es obligatorio")
-    @Schema(description = "User identifier", example = "alan.brito@duocuc.cl", requiredMode = RequiredMode.REQUIRED)
+    @Schema(description = "User identifier", example = "alan.brito", requiredMode = RequiredMode.REQUIRED)
     private String user;
 
     @NotBlank(message = "El rol del usuario es obligatorio")
