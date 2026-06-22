@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "System", description = "Service monitoring & status")
 public class StatusController {
-    @GetMapping("/api/v1/health")
+    @GetMapping("/api/v1/auth/health")
     @Operation(summary = "Check service health", description = "Checks the microservice avaliability")
     @ApiResponse(
             responseCode = "200",
