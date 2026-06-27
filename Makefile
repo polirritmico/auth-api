@@ -19,4 +19,4 @@ clean:
 	./mvnw clean
 
 test:
-	./mvnw test
+	./mvnw clean test -ntp
