@@ -9,49 +9,59 @@ package cl.duoc.auth.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import cl.duoc.auth.dto.request.AuthRequest;
 import cl.duoc.auth.dto.response.AuthResponse;
 import cl.duoc.auth.exception.InvalidCredentialsException;
 import cl.duoc.auth.model.Credentials;
 import cl.duoc.auth.repository.CredentialsRepository;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import java.time.LocalDateTime;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class AuthServiceTest {
-    @InjectMocks
+
+    @Autowired
     private AuthService service;
 
-    @Mock
+    @MockitoBean
     private CredentialsRepository repo;
 
-    @BeforeEach
-    void setup() {
-        repo.deleteAll();
-        repo.save(Credentials.builder()
-                .id(1L)
-                .userId("TestUser")
-                .password("Password")
-                .role("admin")
-                .createdAt(LocalDateTime.of(2026, 1, 1, 0, 0))
-                .build());
-    }
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Test
     void shouldGenerateTokenWithValidCredentialsRequest() {
-        AuthRequest given = new AuthRequest("TestUser", "Password");
-        String expected = "Bearer";
+        String caseName = "TestUser";
+        String casePassword = "Password";
+        AuthRequest given = new AuthRequest(caseName, casePassword);
+        String expected = "TestUser";
+
+        when(repo.findByUserId(caseName))
+                .thenReturn(Optional.of(Credentials.builder()
+                        .id(1L)
+                        .userId(caseName)
+                        .password(encoder.encode(casePassword))
+                        .role("mockRole")
+                        .createdAt(LocalDateTime.now())
+                        .build()));
 
         AuthResponse response = service.auth(given);
-        String output = response.getToken();
+        String token = response.getToken();
 
-        assertEquals(expected, output);
+        DecodedJWT output = JWT.decode(token);
+
+        assertEquals(expected, output.getSubject());
     }
 
     @Test

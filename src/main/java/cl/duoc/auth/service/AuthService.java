@@ -56,7 +56,7 @@ public class AuthService {
         return encoder.matches(password, cred.getPassword());
     }
 
-    private String encodePassword(String rawPassword) {
+    public String encodePassword(String rawPassword) {
         return encoder.encode(rawPassword);
     }
 
