@@ -1,4 +1,4 @@
-# Makefile for Spring Boot Microservices v0.1
+# Makefile for Spring Boot Microservices v0.2
 
 .PHONY: run clean test
 
