@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Schema(name = "AuthRequest", description = "Payload for user authentication")
 public class AuthRequest {
     @NotBlank(message = "El usuario es obligatorio")
-    @Schema(description = "User identifier", example = "test", requiredMode = RequiredMode.REQUIRED)
+    @Schema(description = "User identifier", example = "alanbrito@duocuc.cl", requiredMode = RequiredMode.REQUIRED)
     private String user;
 
     @NotBlank(message = "El password es obligatorio")
