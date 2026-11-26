@@ -75,4 +75,12 @@ public interface AuthApi {
     @ApiResponse(responseCode = "204", description = "Credentials successfully revoked")
     @ApiResponse(responseCode = "404", description = "Target credentials not found", content = @Content)
     public ResponseEntity<Void> revokeCredentials(String userId);
+
+    @Operation(
+            summary = "Reincorporate credentials (Admin)",
+            description =
+                    "Restores a previously revoked user's credentials by clearing the revokedAt timestamp, allowing future authentication attempts for this user ID.")
+    @ApiResponse(responseCode = "204", description = "Credentials successfully reincorporated")
+    @ApiResponse(responseCode = "404", description = "Target revoked credentials not found", content = @Content)
+    public ResponseEntity<Void> reincorporateCredentials(String userId);
 }

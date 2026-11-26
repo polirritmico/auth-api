@@ -114,6 +114,19 @@ public class AuthService {
     }
 
     @Transactional
+    public void reincorporateCredentials(String userId) {
+        logRequest("Received reincorporate credentials request for: " + userId);
+
+        Credentials credentials = repo.findByUserIdAndRevokedAtIsNotNull(userId).orElseThrow(() -> {
+            log.error("Unexpected: Target revoked credentials not found for: {}", userId);
+            return new ResourceNotFoundException("Credenciales no encontradas");
+        });
+
+        credentials.setRevokedAt(null);
+        repo.save(credentials);
+    }
+
+    @Transactional
     public void changePassword(String userId, ChangeUserPasswordRequest req) {
         logRequest("Received admin change password reset request for user: " + userId);
 

@@ -16,6 +16,8 @@ public interface CredentialsRepository extends JpaRepository<Credentials, Long> 
 
     Optional<Credentials> findByUserIdAndRevokedAtIsNull(String userId);
 
+    Optional<Credentials> findByUserIdAndRevokedAtIsNotNull(String userId);
+
     List<Credentials> findByRevokedAtIsNull();
 
     default List<Credentials> findAll() {

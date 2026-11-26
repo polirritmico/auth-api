@@ -62,4 +62,10 @@ public class AuthController implements AuthApi {
         service.revokeCredentials(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{userId}/reincorporate")
+    public ResponseEntity<Void> reincorporateCredentials(@PathVariable String userId) {
+        service.reincorporateCredentials(userId);
+        return ResponseEntity.noContent().build();
+    }
 }
